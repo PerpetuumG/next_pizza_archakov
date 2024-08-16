@@ -23,6 +23,7 @@ export const Header: FC<Props> = ({ className }) => {
         </div>
 
         {/* Центральная часть */}
+        <h1>Search</h1>
 
         {/* Правая часть */}
         <div className={'flex items-center gap-3'}>
