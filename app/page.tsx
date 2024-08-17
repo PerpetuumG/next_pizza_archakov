@@ -9,7 +9,7 @@ export default function Home() {
 
       <TopBar />
 
-      <Container className={'pb-14'}>
+      <Container className={'mt-10 pb-14'}>
         <div className={'flex gap-[60px]'}>
           {/* Фильтрация */}
           <div className={'w-[250px]'}>
@@ -24,6 +24,8 @@ export default function Home() {
               Список товаров
             </div>
           </div>
+
+
         </div>
       </Container>
     </>
