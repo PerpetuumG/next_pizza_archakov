@@ -1,4 +1,4 @@
-import { Container, Filters, Title, TopBar } from '@/components/shared';
+import { Container, Filters, ProductCard, Title, TopBar } from '@/components/shared';
 
 export default function Home() {
   return (
@@ -24,8 +24,6 @@ export default function Home() {
               Список товаров
             </div>
           </div>
-
-
         </div>
       </Container>
     </>
