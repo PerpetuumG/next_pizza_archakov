@@ -1,0 +1,33 @@
+// говорит работать с js
+// + будет ts типизация автоматически
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
+
+// создаем таблицу пользователей
+model User {
+  id Int @id @default(autoincrement()) // Int - только число, autoincrement() - автоматически id увеличивается на +1
+
+  fullName  String
+  email     String
+  password  String
+
+  createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+}
+
+// создаем таблицу продуктов
+model Product {
+  id Int @id @default(autoincrement())
+
+  name String
+  imageUrl String
+
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+}
