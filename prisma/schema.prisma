@@ -33,10 +33,9 @@ model User {
 
 // создаем таблицу категорий
 model Category {
-  id Int @id @default(autoincrement())
-
-  name      String @unique
-  products  Product[]
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  products Product[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
