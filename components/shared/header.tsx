@@ -1,9 +1,10 @@
 import React, { FC } from 'react';
 import { cn } from '@/lib/utils';
-import { Container } from '@/components/shared/container';
+import { Container, SearchInput } from '@/components/shared';
 import Image from 'next/image';
 import { Button } from '@/components/ui';
 import { ArrowRight, ShoppingCart, User } from 'lucide-react';
+import Link from 'next/link';
 
 interface Props {
   className?: string;
@@ -14,16 +15,20 @@ export const Header: FC<Props> = ({ className }) => {
     <header className={cn('border border-b', className)}>
       <Container className={'flex items-center justify-between py-8 '}>
         {/* Левая часть */}
-        <div className={'flex items-center gap-4'}>
-          <Image src={'/logo.png'} alt={'Logo'} width={35} height={35} />
-          <div>
-            <h1 className={'text-2xl uppercase font-black'}>Next Pizza</h1>
-            <p className={'text-sm text-gray-400 leading-3'}>вкусней уже некуда</p>
+        <Link href={'/'}>
+          <div className={'flex items-center gap-4'}>
+            <Image src={'/logo.png'} alt={'Logo'} width={35} height={35} />
+            <div>
+              <h1 className={'text-2xl uppercase font-black'}>Next Pizza</h1>
+              <p className={'text-sm text-gray-400 leading-3'}>вкусней уже некуда</p>
+            </div>
           </div>
-        </div>
+        </Link>
 
         {/* Центральная часть */}
-        <h1>Search</h1>
+        <div className={'mx-10 flex-1'}>
+          <SearchInput />
+        </div>
 
         {/* Правая часть */}
         <div className={'flex items-center gap-3'}>
@@ -46,7 +51,8 @@ export const Header: FC<Props> = ({ className }) => {
                 <b>3</b>
               </div>
 
-              <ArrowRight size={20}
+              <ArrowRight
+                size={20}
                 className={
                   'absolute right-5 transition duration-300 -translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0'
                 }
