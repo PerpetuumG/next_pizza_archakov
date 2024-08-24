@@ -10,13 +10,13 @@ type Item = FilterCheckboxProps;
 interface Props {
   title: string;
   items: Item[];
-  defaultItems: Item[];
+  defaultItems?: Item[];
   limit?: number;
   loading?: boolean;
   searchInputPlaceholder?: string;
   onClickCheckbox?: (id: string) => void;
   defaultValue?: string;
-  selectedIds?: Set<string>;
+  selected?: Set<string>;
   className?: string;
   name?: string;
 }
@@ -31,7 +31,7 @@ const CheckboxFiltersGroup: FC<Props> = ({
   defaultValue,
   className,
   loading,
-  selectedIds,
+  selected,
   name,
 }) => {
   const [showAll, setShowAll] = useState(false);
@@ -58,7 +58,7 @@ const CheckboxFiltersGroup: FC<Props> = ({
   // отобразить все элементы в списке
   const list = showAll
     ? items.filter(item => item.text.toLowerCase().includes(searchValue.toLowerCase()))
-    : defaultItems.slice(0, limit);
+    : (defaultItems || items).slice(0, limit);
 
   return (
     <div className={cn('', className)}>
@@ -81,7 +81,7 @@ const CheckboxFiltersGroup: FC<Props> = ({
             text={item.text}
             value={item.value}
             endAdornment={item.endAdornment}
-            checked={selectedIds?.has(item.value)}
+            checked={selected?.has(item.value)}
             onCheckedChange={() => onClickCheckbox?.(item.value)}
             name={name}
           />
