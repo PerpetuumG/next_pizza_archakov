@@ -2,13 +2,14 @@ import React, { FC } from 'react';
 import { cn } from '@/lib/utils';
 import { Title } from '@/components/shared/title';
 import { Button } from '@/components/ui';
+import { ProductWithRelations } from '@/@types/prisma';
 
 interface Props {
   className?: string;
   imageUrl: string;
   name: string;
-  ingredients?: any[];
-  items?: any[];
+  ingredients?: ProductWithRelations[];
+  items?: ProductWithRelations[];
   onClickAdd?: VoidFunction;
 }
 
