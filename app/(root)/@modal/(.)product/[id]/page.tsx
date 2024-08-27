@@ -18,9 +18,5 @@ export default async function ProductModalPage({ params: { id } }: { params: { i
     return notFound();
   }
 
-  return (
-    <ChooseProductModal product={product}>
-      <Title text={product.name} />;
-    </ChooseProductModal>
-  );
+  return <ChooseProductModal product={product}></ChooseProductModal>;
 }
