@@ -1,7 +1,7 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
 import { prisma } from '@/prisma/prisma-client';
-import { ChooseProductModal, Title } from '@/components/shared';
+import { ChooseProductModal, Title } from '@/shared/components/shared';
 
 export default async function ProductModalPage({ params: { id } }: { params: { id: string } }) {
   const product = await prisma.product.findFirst({
