@@ -16,7 +16,7 @@ import {
 import { Ingredient, ProductItem } from '@prisma/client';
 import { IngredientItem } from '@/shared/components/shared/ingredient-item';
 import { useSet } from 'react-use';
-import { calcTotalPizzaPrice } from '@/shared/lib';
+import { calcTotalPizzaPrice, getAvailablePizzaSizes } from '@/shared/lib';
 
 interface Props {
   className?: string;
@@ -44,12 +44,7 @@ export const ChoosePizzaForm: FC<Props> = ({
 
   const textDetails = `${size} см, ${mapPizzaType[type]} пицца`;
 
-  const filteredPizzasByType = items.filter(item => item.pizzaType === type);
-  const availablePizzaSizes = pizzaSizes.map(item => ({
-    name: item.name,
-    value: item.value,
-    disabled: !filteredPizzasByType.some(pizza => Number(pizza.size) === Number(item.value)),
-  }));
+  const availablePizzaSizes = getAvailablePizzaSizes(type, items);
 
   useEffect(() => {
     const isAvailableSize = availablePizzaSizes?.find(
