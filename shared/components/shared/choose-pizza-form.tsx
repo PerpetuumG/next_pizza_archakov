@@ -1,19 +1,30 @@
-import React, { FC } from 'react';
+'use client';
+
+import React, { FC, useEffect, useState } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Title } from '@/shared/components/shared/title';
 import { Button } from '@/shared/components/ui';
-import { ProductWithRelations } from '@/@types/prisma';
 import { PizzaImage } from '@/shared/components/shared/pizza-image';
 import { GroupVariants } from '@/shared/components/shared/group-variants';
-import { pizzaSizes } from '@/shared/constants/pizza';
+import {
+  mapPizzaType,
+  PizzaSize,
+  pizzaSizes,
+  PizzaType,
+  pizzaTypes,
+} from '@/shared/constants/pizza';
+import { Ingredient, ProductItem } from '@prisma/client';
+import { IngredientItem } from '@/shared/components/shared/ingredient-item';
+import { useSet } from 'react-use';
+import { calcTotalPizzaPrice } from '@/shared/lib';
 
 interface Props {
   className?: string;
   imageUrl: string;
   name: string;
-  ingredients?: ProductWithRelations[];
-  items?: ProductWithRelations[];
-  onClickAdd?: VoidFunction;
+  ingredients: Ingredient[];
+  items: ProductItem[];
+  onClickAddCart?: VoidFunction;
 }
 
 export const ChoosePizzaForm: FC<Props> = ({
@@ -22,11 +33,38 @@ export const ChoosePizzaForm: FC<Props> = ({
   name,
   ingredients,
   items,
-  onClickAdd,
+  onClickAddCart,
 }) => {
-  const textDetails = '30 см, традиционное тесто 30';
-  const totalPrice = 350;
-  const size = 30;
+  const [size, setSize] = useState<PizzaSize>(20);
+  const [type, setType] = useState<PizzaType>(1);
+
+  const [selectedIngredients, { toggle: addIngredient }] = useSet(new Set<number>([]));
+
+  const totalPrice = calcTotalPizzaPrice(type, size, items, ingredients, selectedIngredients);
+
+  const textDetails = `${size} см, ${mapPizzaType[type]} пицца`;
+
+  const filteredPizzasByType = items.filter(item => item.pizzaType === type);
+  const availablePizzaSizes = pizzaSizes.map(item => ({
+    name: item.name,
+    value: item.value,
+    disabled: !filteredPizzasByType.some(pizza => Number(pizza.size) === Number(item.value)),
+  }));
+
+  useEffect(() => {
+    const isAvailableSize = availablePizzaSizes?.find(
+      item => Number(item.value) === size && !item.disabled,
+    );
+    const availableSizes = availablePizzaSizes?.find(item => !item.disabled);
+
+    if (!isAvailableSize && availableSizes) {
+      setSize(Number(availableSizes.value) as PizzaSize);
+    }
+  }, [type]);
+
+  const handleClickAdd = () => {
+    onClickAddCart?.();
+  };
 
   return (
     <div className={cn('flex flex-1', className)}>
@@ -37,12 +75,39 @@ export const ChoosePizzaForm: FC<Props> = ({
 
         <p className={'text-gray-400'}>{textDetails}</p>
 
-        <GroupVariants items={pizzaSizes} />
+        <div className={'flex flex-col gap-4 mt-5'}>
+          <GroupVariants
+            items={availablePizzaSizes}
+            value={String(size)}
+            onClick={value => setSize(Number(value) as PizzaSize)}
+          />
+
+          <GroupVariants
+            items={pizzaTypes}
+            value={String(type)}
+            onClick={value => setType(Number(value) as PizzaType)}
+          />
+        </div>
+
+        <div className={'bg-gray-50 p-5 rounded-md h-[420px] overflow-auto scrollbar mt-5'}>
+          <div className={'grid grid-cols-3 gap-3'}>
+            {ingredients.map(ingredient => (
+              <IngredientItem
+                key={ingredient.id}
+                name={ingredient.name}
+                price={ingredient.price}
+                imageUrl={ingredient.imageUrl}
+                onClick={() => addIngredient(ingredient.id)}
+                active={selectedIngredients.has(ingredient.id)}
+              />
+            ))}
+          </div>
+        </div>
 
         <Button
           // loading={loading}
-          // onClick={handleClickAdd}
-          className={'h-[55px] px-10 text-base rounded-[18px] w-full mt-10'}
+          onClick={handleClickAdd}
+          className={'h-[55px] px- 10 text-base rounded-[18px] w-full mt-10'}
         >
           Добавить в корзину за {totalPrice} $
         </Button>

@@ -74,7 +74,7 @@ model ProductItem {
 }
 
 // создаем таблицу ингридиентов
-model Ingredient {
+model IngredientItem {
   id Int @id @default(autoincrement())
 
   name      String
