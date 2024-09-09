@@ -1,22 +1,16 @@
 'use client';
 
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Title } from '@/shared/components/shared/title';
 import { Button } from '@/shared/components/ui';
 import { PizzaImage } from '@/shared/components/shared/pizza-image';
 import { GroupVariants } from '@/shared/components/shared/group-variants';
-import {
-  mapPizzaType,
-  PizzaSize,
-  pizzaSizes,
-  PizzaType,
-  pizzaTypes,
-} from '@/shared/constants/pizza';
+import { PizzaSize, PizzaType, pizzaTypes } from '@/shared/constants/pizza';
 import { Ingredient, ProductItem } from '@prisma/client';
 import { IngredientItem } from '@/shared/components/shared/ingredient-item';
-import { useSet } from 'react-use';
-import { calcTotalPizzaPrice, getAvailablePizzaSizes } from '@/shared/lib';
+import { getPizzaDetails } from '@/shared/lib';
+import { usePizzaOptions } from '@/shared/hooks';
 
 interface Props {
   className?: string;
@@ -35,27 +29,16 @@ export const ChoosePizzaForm: FC<Props> = ({
   items,
   onClickAddCart,
 }) => {
-  const [size, setSize] = useState<PizzaSize>(20);
-  const [type, setType] = useState<PizzaType>(1);
+  const { size, type, selectedIngredients, availableSizes, setSize, setType, addIngredient } =
+    usePizzaOptions(items);
 
-  const [selectedIngredients, { toggle: addIngredient }] = useSet(new Set<number>([]));
-
-  const totalPrice = calcTotalPizzaPrice(type, size, items, ingredients, selectedIngredients);
-
-  const textDetails = `${size} см, ${mapPizzaType[type]} пицца`;
-
-  const availablePizzaSizes = getAvailablePizzaSizes(type, items);
-
-  useEffect(() => {
-    const isAvailableSize = availablePizzaSizes?.find(
-      item => Number(item.value) === size && !item.disabled,
-    );
-    const availableSizes = availablePizzaSizes?.find(item => !item.disabled);
-
-    if (!isAvailableSize && availableSizes) {
-      setSize(Number(availableSizes.value) as PizzaSize);
-    }
-  }, [type]);
+  const { totalPrice, textDetails } = getPizzaDetails(
+    type,
+    size,
+    items,
+    ingredients,
+    selectedIngredients,
+  );
 
   const handleClickAdd = () => {
     onClickAddCart?.();
@@ -72,7 +55,7 @@ export const ChoosePizzaForm: FC<Props> = ({
 
         <div className={'flex flex-col gap-4 mt-5'}>
           <GroupVariants
-            items={availablePizzaSizes}
+            items={availableSizes}
             value={String(size)}
             onClick={value => setSize(Number(value) as PizzaSize)}
           />
