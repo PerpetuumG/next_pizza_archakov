@@ -60,7 +60,12 @@ export async function POST(req: NextRequest) {
       where: {
         cartId: userCart.id,
         productItemId: data.productItemId,
-        ingredients: { every: { id: { in: data.ingredients } } },
+        ingredients: {
+          every: { id: { in: data.ingredients } },
+
+          // костыль для добавления одинаковых товаров в корзину
+          // some: {},
+        },
       },
     });
 
@@ -74,17 +79,17 @@ export async function POST(req: NextRequest) {
           quantity: findCartItem.quantity + 1,
         },
       });
+    } else {
+      // Если товар не найден
+      await prisma.cartItem.create({
+        data: {
+          cartId: userCart.id,
+          productItemId: data.productItemId,
+          quantity: 1,
+          ingredients: { connect: data.ingredients?.map(id => ({ id })) },
+        },
+      });
     }
-
-    // Если товар не найден
-    await prisma.cartItem.create({
-      data: {
-        cartId: userCart.id,
-        productItemId: data.productItemId,
-        quantity: 1,
-        ingredients: { connect: data.ingredients?.map(id => ({ id })) },
-      },
-    });
 
     // Обновляем токен и корзину
     const updateUserCart = await updateCartTotalAmount(token);
