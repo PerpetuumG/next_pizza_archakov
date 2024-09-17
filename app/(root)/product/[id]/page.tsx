@@ -21,7 +21,7 @@ export default async function ProductPage({ params: { id } }: { params: { id: st
           <p className={'text-gray-400'}>slmmrmrgm</p>
 
           <GroupVariants
-            selectedValue={'2'}
+            value={'2'}
             items={[
               { name: 'Маленькая', value: '1' },
               { name: 'Средняя', value: '2' },

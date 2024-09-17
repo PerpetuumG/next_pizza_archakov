@@ -17,7 +17,7 @@ export const Filters: FC<Props> = ({ className }) => {
   const filters = useFilters();
   useQueryFilters(filters);
 
-  const items = ingredients.map(item => ({ value: String(item.id), text: String(item.name) }));
+  const items = ingredients.map(item => ({ value: String(item.id), text: item.name }));
 
   const updatePrices = (prices: number[]) => {
     filters.setPrices('priceFrom', prices[0]);
@@ -64,7 +64,7 @@ export const Filters: FC<Props> = ({ className }) => {
             min={0}
             max={1000}
             value={String(filters.prices.priceFrom)}
-            onClick={e => filters.setPrices('priceFrom', Number(e.target.value))}
+            onChange={e => filters.setPrices('priceFrom', Number(e.target.value))}
           />
           <Input
             type={'number'}
@@ -72,7 +72,7 @@ export const Filters: FC<Props> = ({ className }) => {
             min={100}
             max={1000}
             value={String(filters.prices.priceTo)}
-            onClick={e => filters.setPrices('priceTo', Number(e.target.value))}
+            onChange={e => filters.setPrices('priceTo', Number(e.target.value))}
           />
         </div>
 

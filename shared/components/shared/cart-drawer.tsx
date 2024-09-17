@@ -15,6 +15,7 @@ import { ArrowRight } from 'lucide-react';
 import { CartDrawerItem } from '@/shared/components/shared';
 import { getCartItemDetails } from '@/shared/lib';
 import { useCartStore } from '@/shared/store';
+import {PizzaSize, PizzaType} from "@/shared/constants/pizza";
 
 interface Props {
   className?: string;
