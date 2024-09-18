@@ -3,7 +3,7 @@ import { cn } from '@/shared/lib/utils';
 
 interface Props {
   className?: string;
-  title?: string;
+  title?: React.ReactNode;
   value?: string;
 }
 
