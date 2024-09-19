@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 import { cn } from '@/shared/lib/utils';
-import { RequiredSymbol } from '@/shared/components/shared';
+import { ClearButton, ErrorText, RequiredSymbol } from '@/shared/components/shared';
 import { Input } from '@/shared/components/ui';
-import {useFormContext} from "react-hook-form";
+import { useFormContext } from 'react-hook-form';
 
-interface Props {
+interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   clasName?: string;
   name: string;
   label?: string;
@@ -12,9 +12,9 @@ interface Props {
 }
 
 export const FormInput: FC<Props> = ({ clasName, name, label, required, ...props }) => {
-  const {} = useFormContext()
+  // const {} = useFormContext();
 
-    return (
+  return (
     <div className={cn('', clasName)}>
       {label && (
         <p className={'font-medium mb-2'}>
@@ -25,10 +25,10 @@ export const FormInput: FC<Props> = ({ clasName, name, label, required, ...props
       <div className={'relative'}>
         <Input className={'h-12 text-md'} {...props} />
 
-
+        <ClearButton />
       </div>
 
-        {}
+      <ErrorText text={'Поле обязательно для заполнения'} className={'mt-2'} />
     </div>
   );
 };
