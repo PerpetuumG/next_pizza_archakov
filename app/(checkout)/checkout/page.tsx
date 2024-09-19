@@ -11,12 +11,13 @@ import {
 import { useCart } from '@/shared/hooks';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { checkoutFormSchema } from '@/shared/components/shared/checkout/checkout-form-schema';
 
 export default function CheckoutPage() {
   const { items, totalAmount, updateItemQuantity, removeCartItem } = useCart();
 
   const form = useForm({
-    resolver: zodResolver(),
+    resolver: zodResolver(checkoutFormSchema),
     defaultValues: {
       email: '',
       firstName: '',
