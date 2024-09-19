@@ -2,20 +2,15 @@
 
 import {
   CheckoutItem,
-  CheckoutItemDetails,
   CheckoutSidebar,
   Container,
   Title,
   WhiteBlock,
 } from '@/shared/components/shared';
-import { Button, Input, Textarea } from '@/shared/components/ui';
-import { ArrowRight, Package, Percent, Truck } from 'lucide-react';
+import { Input, Textarea } from '@/shared/components/ui';
 import { useCart } from '@/shared/hooks';
 import { getCartItemDetails } from '@/shared/lib';
 import { PizzaSize, PizzaType } from '@/shared/constants/pizza';
-
-const VAT = 15;
-const DELIVERY_PRICE = 250;
 
 export default function CheckoutPage() {
   const { items, totalAmount, updateItemQuantity, removeCartItem } = useCart();
@@ -24,9 +19,6 @@ export default function CheckoutPage() {
     const newQuantity = type === 'plus' ? quantity + 1 : quantity - 1;
     updateItemQuantity(id, newQuantity);
   };
-
-  const vatPrice = (totalAmount * VAT) / 100;
-  const totalPrice = totalAmount + vatPrice + DELIVERY_PRICE;
 
   return (
     <Container className={'mt-10'}>
@@ -77,12 +69,7 @@ export default function CheckoutPage() {
 
         {/* Правый блок */}
         <div className={'w-[450px]'}>
-          <CheckoutSidebar
-            totalAmount={totalAmount}
-            totalPrice={totalPrice}
-            vatPrice={vatPrice}
-            DELIVERY_PRICE={DELIVERY_PRICE}
-          />
+          <CheckoutSidebar totalAmount={totalAmount} />
         </div>
       </div>
     </Container>

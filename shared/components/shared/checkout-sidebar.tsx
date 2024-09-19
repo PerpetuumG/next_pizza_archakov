@@ -3,24 +3,22 @@ import { WhiteBlock } from '@/shared/components/shared/white-block';
 import { CheckoutItemDetails } from '@/shared/components/shared/checkout-item-details';
 import { ArrowRight, Package, Percent, Truck } from 'lucide-react';
 import { Button } from '@/shared/components/ui';
+import { cn } from '@/shared/lib/utils';
+
+const VAT = 15;
+const DELIVERY_PRICE = 250;
 
 interface Props {
-  totalPrice: number;
   totalAmount: number;
-  vatPrice: number;
-  DELIVERY_PRICE: number;
   className?: string;
 }
 
-export const CheckoutSidebar: FC<Props> = ({
-  className,
-  totalPrice,
-  totalAmount,
-  vatPrice,
-  DELIVERY_PRICE,
-}) => {
+export const CheckoutSidebar: FC<Props> = ({ className, totalAmount }) => {
+  const vatPrice = (totalAmount * VAT) / 100;
+  const totalPrice = totalAmount + vatPrice + DELIVERY_PRICE;
+
   return (
-    <WhiteBlock className={'p-6 sticky top-4'}>
+    <WhiteBlock className={cn('p-6 sticky top-4', className)}>
       <div className={'flex flex-col gap-1'}>
         <span className={'text-xl'}>Итого: </span>
         <span className={'text-[34px] font-extrabold'}>{totalPrice} $</span>
