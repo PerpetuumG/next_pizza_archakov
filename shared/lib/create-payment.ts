@@ -1,7 +1,13 @@
 import axios from 'axios';
 import { PaymentData } from '@/@types/yookassa';
 
-export async function createPayment(details: any) {
+interface Props {
+  description: string;
+  orderId: string;
+  amount: number;
+}
+
+export async function createPayment(details: Props) {
   const { data } = await axios.post<PaymentData>(
     'https://api.yookassa.ru/v3/payments',
     {
@@ -12,7 +18,7 @@ export async function createPayment(details: any) {
       capture: true,
       description: details.description,
       metadata: {
-        order_id: details.order_id,
+        order_id: details.orderId,
       },
       confirmation: {
         type: 'redirect',
@@ -21,10 +27,11 @@ export async function createPayment(details: any) {
     },
     {
       auth: {
-        username: process.env.YOOKASSA_API_KEY as string,
-        password: '',
+        username: process.env.YOOKASSA_STORE_ID as string,
+        password: process.env.YOOKASSA_API_KEY as string,
       },
       headers: {
+        'Content-Type': 'application/json',
         'Idempotence-Key': Math.random().toString(36).substring(7),
       },
     },

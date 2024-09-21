@@ -4,7 +4,7 @@ import { CheckoutFormValues } from '@/shared/constants';
 import { cookies } from 'next/headers';
 import { prisma } from '@/prisma/prisma-client';
 import { OrderStatus } from '@prisma/client';
-import { sendEmail } from '@/shared/lib';
+import { createPayment, sendEmail } from '@/shared/lib';
 import { PayOrderTemplate } from '@/shared/components';
 
 export async function createOrder(data: CheckoutFormValues) {
@@ -78,7 +78,26 @@ export async function createOrder(data: CheckoutFormValues) {
       },
     });
 
-    /* TODO: Сделать создание ссылки оплаты */
+    const paymentData = await createPayment({
+      amount: order.totalAmount,
+      orderId: order.id,
+      description: 'Оплата заказа №' + order.id,
+    });
+
+    if (!paymentData) {
+      throw new Error('Не удалось создать платеж');
+    }
+
+    await prisma.order.update({
+      where: {
+        id: order.id,
+      },
+      data: {
+        paymentId: paymentData.id,
+      },
+    });
+
+    const paymentUrl = paymentData.confirmation.confirmation_url;
 
     await sendEmail(
       data.email,
@@ -86,9 +105,11 @@ export async function createOrder(data: CheckoutFormValues) {
       PayOrderTemplate({
         orderId: order.id,
         totalAmount: order.totalAmount,
-        paymentUrl: '',
+        paymentUrl: paymentUrl,
       }),
     );
+
+    return paymentUrl;
   } catch (e) {
     console.error('[createOrder] Server error', e);
   }
