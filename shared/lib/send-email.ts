@@ -1,10 +1,10 @@
 import { Resend } from 'resend';
-import { PayOrderTemplate } from '@/shared/components/email-templates/pay-order-template';
+import React from 'react';
 
 export const sendEmail = async (
   toUserEmail: string,
   subject: string,
-  params?: any,
+  template: React.ReactNode,
 ) => {
   const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -12,7 +12,7 @@ export const sendEmail = async (
     from: 'onboarding@resend.dev',
     to: toUserEmail,
     subject: subject,
-    react: PayOrderTemplate(params),
+    react: template,
   });
 
   if (error) {
