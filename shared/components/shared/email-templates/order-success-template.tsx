@@ -15,6 +15,8 @@ export const OrderSuccessTemplate: FC<Props> = ({ className, orderId, items }) =
 
       <p>Ваш заказ №{orderId} оплачен. Список товаров:</p>
 
+      <hr />
+
       <ul>
         {items.map(item => (
           <li key={item.id}>

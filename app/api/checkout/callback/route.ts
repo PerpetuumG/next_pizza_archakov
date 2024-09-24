@@ -3,6 +3,8 @@ import { PaymentCallbackData } from '@/@types/yookassa';
 import { prisma } from '@/prisma/prisma-client';
 import { OrderStatus } from '@prisma/client';
 import { CartItemDTO } from '@/shared/services/dto/cart.dto';
+import { sendEmail } from '@/shared/lib';
+import { OrderSuccessTemplate } from '@/shared/components';
 
 export async function POST(req: NextRequest) {
   try {
@@ -18,18 +20,26 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Order not found' });
     }
 
+    const isSucceeded = body.object.status === 'succeeded';
+
     await prisma.order.update({
       where: {
         id: order.id,
       },
       data: {
-        status: OrderStatus.SUCCEEDED,
+        status: isSucceeded ? OrderStatus.SUCCEEDED : OrderStatus.CANCELLED,
       },
     });
 
-    const items = order?.items as unknown as CartItemDTO[];
+    const items = JSON.parse(order?.items as string) as CartItemDTO[];
 
-
+    if (isSucceeded) {
+      await sendEmail(
+        order.email,
+        'Next Pizza / Ваш заказ успешно оформлен',
+        OrderSuccessTemplate({ orderId: order.id, items }),
+      );
+    }
   } catch (e) {
     console.error('[Checkout Callback] Error: ', e);
     return NextResponse.json({ error: 'Server error' });
