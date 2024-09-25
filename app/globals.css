@@ -80,3 +80,13 @@ html {
     @apply bg-background text-foreground;
   }
 }
+
+#progress .bar {
+  @apply bg-primary !important;
+}
+#progress .peg {
+  @apply shadow-md shadow-primary !important;
+}
+#progress .spinner-icon {
+  @apply border-t-primary border-l-primary !important;
+}
