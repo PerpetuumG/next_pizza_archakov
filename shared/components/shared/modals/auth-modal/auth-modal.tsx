@@ -1,7 +1,8 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Button, Dialog, DialogContent } from '@/shared/components';
 import { signIn } from 'next-auth/react';
+import { LoginForm } from '@/shared/components/shared/modals/auth-modal/forms/login-form';
 
 interface Props {
   className?: string;
@@ -10,6 +11,12 @@ interface Props {
 }
 
 export const AuthModal: FC<Props> = ({ className, open, onClose }) => {
+  const [type, setType] = useState<'login' | 'register'>('login');
+
+  const onSwitchType = () => {
+    setType(type === 'login' ? 'register' : 'login');
+  };
+
   const handleClose = () => {
     onClose();
   };
@@ -17,7 +24,8 @@ export const AuthModal: FC<Props> = ({ className, open, onClose }) => {
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className={'w-[450px] bg-white p-10'}>
-        FORM
+        {type === 'login' ? <LoginForm onClose={handleClose} /> : <h1>REGISTER</h1>}
+
         <hr />
         <div className={'flex gap-2'}>
           <Button
@@ -53,11 +61,14 @@ export const AuthModal: FC<Props> = ({ className, open, onClose }) => {
             <img
               className={'w-6 h-6'}
               src={'https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg'}
-              alt={'Google'}
+              alt={'Google '}
             />
             Google
           </Button>
         </div>
+        <Button variant={'outline'} onClick={onSwitchType} type={'button'} className={'h-12'}>
+          {type === 'login' ? 'Войти' : 'Регистрация'}
+        </Button>
       </DialogContent>
     </Dialog>
   );
