@@ -5,8 +5,8 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { formRegisterSchema, TFormRegisterValues } from './schemas';
 import toast from 'react-hot-toast';
-import { registerUser } from '@/app/actions';
 import { Button, FormInput } from '@/shared/components';
+import { registerUser } from '@/app/actions';
 
 interface Props {
   onClose?: VoidFunction;
@@ -54,7 +54,7 @@ export const RegisterForm: React.FC<Props> = ({ onClose, onClickLogin }) => {
         <FormInput name='password' label='Пароль' type='password' required />
         <FormInput name='confirmPassword' label='Подтвердите пароль' type='password' required />
 
-        <Button disabled={form.formState.isSubmitting} className='h-12 text-base' type='submit'>
+        <Button loading={form.formState.isSubmitting} className='h-12 text-base' type='submit'>
           Зарегистрироваться
         </Button>
       </form>
