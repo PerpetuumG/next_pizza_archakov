@@ -1,5 +1,6 @@
+'use client';
+
 import React, { FC, useState } from 'react';
-import { cn } from '@/shared/lib/utils';
 import { Button, Dialog, DialogContent } from '@/shared/components';
 import { signIn } from 'next-auth/react';
 import { LoginForm } from '@/shared/components/shared/modals/auth-modal/forms/login-form';
