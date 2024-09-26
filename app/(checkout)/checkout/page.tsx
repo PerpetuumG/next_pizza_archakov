@@ -17,6 +17,7 @@ import { createOrder } from '@/app/actions';
 import toast from 'react-hot-toast';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { Api } from '@/shared/services/api-client';
 
 export default function CheckoutPage() {
   const [submitting, setSubmitting] = useState(false);
@@ -36,6 +37,15 @@ export default function CheckoutPage() {
   });
 
   useEffect(() => {
+    async function fetchUserInfo() {
+      const data = await Api.auth.getMe();
+      const [firstName, lastName] = data.fullName.split(' ');
+
+      form.setValue('firstName', firstName);
+      form.setValue('lastName', lastName);
+      form.setValue('email', data.email);
+    }
+
     if (session) {
       fetchUserInfo();
     }
