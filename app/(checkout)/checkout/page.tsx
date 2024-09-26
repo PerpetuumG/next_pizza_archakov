@@ -15,10 +15,12 @@ import { checkoutFormSchema, CheckoutFormValues } from '@/shared/constants';
 import { cn } from '@/shared/lib/utils';
 import { createOrder } from '@/app/actions';
 import toast from 'react-hot-toast';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
 
 export default function CheckoutPage() {
   const [submitting, setSubmitting] = useState(false);
+  const { data: session } = useSession();
   const { items, totalAmount, updateItemQuantity, removeCartItem, loading } = useCart();
 
   const form = useForm<CheckoutFormValues>({
@@ -32,6 +34,12 @@ export default function CheckoutPage() {
       comment: '',
     },
   });
+
+  useEffect(() => {
+    if (session) {
+      fetchUserInfo();
+    }
+  }, [session]);
 
   const onSubmit: SubmitHandler<CheckoutFormValues> = async data => {
     try {
