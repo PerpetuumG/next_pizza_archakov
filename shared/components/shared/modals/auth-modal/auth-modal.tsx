@@ -4,6 +4,7 @@ import React, { FC, useState } from 'react';
 import { Button, Dialog, DialogContent } from '@/shared/components';
 import { signIn } from 'next-auth/react';
 import { LoginForm } from '@/shared/components/shared/modals/auth-modal/forms/login-form';
+import { RegisterForm } from '@/shared/components/shared/modals/auth-modal/forms/register-form';
 
 interface Props {
   className?: string;
@@ -25,7 +26,11 @@ export const AuthModal: FC<Props> = ({ className, open, onClose }) => {
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className={'w-[450px] bg-white p-10'}>
-        {type === 'login' ? <LoginForm onClose={handleClose} /> : <h1>REGISTER</h1>}
+        {type === 'login' ? (
+          <LoginForm onClose={handleClose} />
+        ) : (
+          <RegisterForm onClose={handleClose} />
+        )}
 
         <hr />
         <div className={'flex gap-2'}>

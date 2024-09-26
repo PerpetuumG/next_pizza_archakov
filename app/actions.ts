@@ -146,3 +146,5 @@ export async function updateUserInfo(body: Prisma.UserUpdateInput) {
     throw e;
   }
 }
+
+export async function registerUser() {}
