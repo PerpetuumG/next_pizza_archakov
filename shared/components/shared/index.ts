@@ -34,3 +34,4 @@ export * from './form';
 export * from './checkout';
 export * from './email-templates';
 export { ProfileButton } from './profile-button';
+export { InfoBlock } from './info-block';

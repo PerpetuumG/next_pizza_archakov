@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { getUserSession } from '@/shared/lib';
+import { getUserSession } from '@/shared/lib/get-user-session';
 
 export default async function ProfilePage() {
   const session = await getUserSession();
