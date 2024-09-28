@@ -83,7 +83,7 @@ export async function createOrder(data: CheckoutFormValues) {
 
     const paymentData = await createPayment({
       amount: order.totalAmount,
-      orderId: order.id,
+      orderId: String(order.id),
       description: 'Оплата заказа №' + order.id,
     });
 

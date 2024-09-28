@@ -74,7 +74,7 @@ model ProductItem {
 }
 
 // создаем таблицу ингридиентов
-model IngredientItem {
+model Ingredient {
   id Int @id @default(autoincrement())
 
   name      String
@@ -106,13 +106,13 @@ model Cart {
   updatedAt DateTime @updatedAt
 }
 
-model CheckoutItem {
+model CartItem {
   id Int @id @default(autoincrement())
 
-  cart Cart @relation(fields: [cartId], references: [id])
+  cart   Cart @relation(fields: [cartId], references: [id])
   cartId Int
 
-  productItem ProductItem @relation(fields: [productItemId], references: [id])
+  productItem   ProductItem @relation(fields: [productItemId], references: [id])
   productItemId Int
 
   quantity Int @default(1)
@@ -170,7 +170,7 @@ model Story {
 }
 
 model StoryItem {
-  id                Int @default(autoincrement())
+  id                Int @id @default(autoincrement())
 
   storyId           Int
   story             Story @relation(fields: [storyId], references: [id])

@@ -1,3 +1,5 @@
+'use client';
+
 import React, { FC } from 'react';
 import { ErrorText, FormTextarea, WhiteBlock } from '@/shared/components/shared';
 import { AddressInput } from '@/shared/components/shared/address-input';

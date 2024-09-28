@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { PaymentCallbackData } from '@/@types/yookassa';
 import { prisma } from '@/prisma/prisma-client';
-import { OrderStatus } from '@prisma/client';
-import { CartItemDTO } from '@/shared/services/dto/cart.dto';
 import { sendEmail } from '@/shared/lib';
+import { CartItemDTO } from '@/shared/services/dto/cart.dto';
+import { OrderStatus } from '@prisma/client';
+import { NextRequest, NextResponse } from 'next/server';
 import { OrderSuccessTemplate } from '@/shared/components';
 
 export async function POST(req: NextRequest) {
@@ -36,12 +36,14 @@ export async function POST(req: NextRequest) {
     if (isSucceeded) {
       await sendEmail(
         order.email,
-        'Next Pizza / Ваш заказ успешно оформлен',
+        'Next Pizza / Ваш заказ успешно оформлен 🎉',
         OrderSuccessTemplate({ orderId: order.id, items }),
       );
+    } else {
+      // Письмо о неуспешной оплате
     }
-  } catch (e) {
-    console.error('[Checkout Callback] Error: ', e);
+  } catch (error) {
+    console.log('[Checkout Callback] Error:', error);
     return NextResponse.json({ error: 'Server error' });
   }
 }

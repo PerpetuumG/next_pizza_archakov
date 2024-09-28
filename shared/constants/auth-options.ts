@@ -72,7 +72,7 @@ export const authOptions: AuthOptions = {
     strategy: 'jwt',
   },
   callbacks: {
-    async singIn({ user, account }) {
+    async signIn({ user, account }) {
       try {
         if (account?.provider === 'credentials') {
           return true;

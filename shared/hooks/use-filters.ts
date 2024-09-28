@@ -1,6 +1,6 @@
 import { useSearchParams } from 'next/navigation';
 import { useSet } from 'react-use';
-import { useMemo, useState } from 'react';
+import React from 'react';
 
 interface PriceProps {
   priceFrom?: number;
@@ -30,25 +30,21 @@ interface ReturnProps extends Filters {
 export const useFilters = (): ReturnProps => {
   const searchParams = useSearchParams() as unknown as Map<keyof QueryFilters, string>;
 
-  // Фильтр ингредиентов
   const [selectedIngredients, { toggle: toggleIngredients }] = useSet(
     new Set<string>(searchParams.get('ingredients')?.split(',')),
   );
 
-  // Фильтр размера
   const [sizes, { toggle: toggleSizes }] = useSet(
     new Set<string>(searchParams.has('sizes') ? searchParams.get('sizes')?.split(',') : []),
   );
 
-  // Фильтр типа пиццы
   const [pizzaTypes, { toggle: togglePizzaTypes }] = useSet(
     new Set<string>(
       searchParams.has('pizzaTypes') ? searchParams.get('pizzaTypes')?.split(',') : [],
     ),
   );
 
-  // Фильтр стоимости
-  const [prices, setPrices] = useState<PriceProps>({
+  const [prices, setPrices] = React.useState<PriceProps>({
     priceFrom: Number(searchParams.get('priceFrom')) || undefined,
     priceTo: Number(searchParams.get('priceTo')) || undefined,
   });
@@ -60,7 +56,7 @@ export const useFilters = (): ReturnProps => {
     }));
   };
 
-  return useMemo(
+  return React.useMemo(
     () => ({
       sizes,
       pizzaTypes,
